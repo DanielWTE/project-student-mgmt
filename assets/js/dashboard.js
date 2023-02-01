@@ -66,10 +66,21 @@ $('#listStudents').select2({
 $('#listTeachers').select2({
   placeholder: "Auswahl an Lehrpersonen",
   ajax: {
-    url: 'https://api.github.com/search/repositories',
-    dataType: 'json'
-    // Additional AJAX parameters go here; see the end of this chapter for the full code of this example
-  }
+    url: 'backend/lists/listTeacher.php',
+    dataType: 'json',
+    delay: 250,
+    data: function (data) {
+        return {
+            searchTerm: data.term // search term
+        };
+    },
+    processResults: function (response) {
+        return {
+            results:response
+        };
+    },
+    cache: true
+}
 });
 
 $('#listClasses').select2({
@@ -100,10 +111,34 @@ $('#listScores').select2({
 });
 });
 
+function fetchTeacherData(){
+  let username = $('#listTeachers').text();
+  $.ajax({
+    url:'backend/teacher/fetchTeacherData.php',
+    method:'POST',
+    data:{
+      username:username,
+    },
+    success:function(data){
+      const obj = JSON.parse(data);
+      document.getElementById('username').value = obj['username'];
+      document.getElementById('name').value = obj['name'];
+      document.getElementById('role').value = obj['role'];
+      // document.getElementById('subjects').value = obj['subjects'];
+      document.getElementById('room').value = obj['room'];
+      // document.getElementById('birthdate').date = Date.parse(obj['birthdate']);
+      document.getElementById('email').value = obj['email'];
+    }
+  });
+}
+
+
+/* Requests */
 
 function submitCreateTeacher(){
   console.log('Creating teacher...');
   let form = $('#createTeacher');
+  // Hier gibt es ggf. Probleme / Also mal deaktiviert lol
   // if(form.valid()){
     formData = form.serialize();
     formParams = new URLSearchParams(formData);
@@ -134,7 +169,7 @@ function submitCreateTeacher(){
       },
       success:function(data){
       if(data == "success"){
-                      window.location.href = "/teacher";
+                      window.location.href = "/teacher.php";
                   } else {
                       alert("Etwas ist Schief gegangen. Versuch es erneut!");
                   }

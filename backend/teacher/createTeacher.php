@@ -23,7 +23,7 @@ if(isset($_POST)){
         }
 
         if(!$error) { 
-            $user = $mongoDB->users->findOne(['username' => $username]);
+            $user = $mongoDB->teacher->findOne(['username' => $username]);
             
             if($user !== null) {
                 echo 'Dieser Nutzername exisitert bereits!';
@@ -35,7 +35,7 @@ if(isset($_POST)){
             $passwort_hash = password_hash($password, PASSWORD_DEFAULT);
             $date = date('Y-m-d H:i:s');
 
-            $checkStmt = $mongoDB->users->findOne(['id' => ['$exists' => true]], ['sort' => ['id' => -1]]);
+            $checkStmt = $mongoDB->teacher->findOne(['id' => ['$exists' => true]], ['sort' => ['id' => -1]]);
             $id = $checkStmt->id + 1;
             
             $user = [
@@ -50,7 +50,7 @@ if(isset($_POST)){
                 "password" => $passwort_hash,
                 "created" => new MongoDB\BSON\UTCDateTime(strtotime($date)*1000)
             ];
-            $mongoDB->users->insertOne($user);
+            $mongoDB->teacher->insertOne($user);
             echo "success";
         }
     }

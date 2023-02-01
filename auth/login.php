@@ -9,7 +9,7 @@ if(isset($_GET['login'])){
 
     $mongoClient = new MongoDB\Client($mongoDBConnection);
     $mongoDB = $mongoClient->$mongoDBDatabase;
-    $user = $mongoDB->users->findOne(array('username' => $username));
+    $user = $mongoDB->teacher->findOne(array('username' => $username));
 
     if ($user !== null && password_verify($password, $user['password'])) {
         $_SESSION['userid'] = $user['id'];

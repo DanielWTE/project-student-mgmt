@@ -1,4 +1,9 @@
-<?php require 'static/auth.php' ?>
+<?php require 'static/auth.php';
+$mongoClient = new MongoDB\Client($mongoDBConnection);
+$mongoDB = $mongoClient->$mongoDBDatabase;
+
+$teacherCount = $mongoDB->teacher->count();
+?>
 
 <!DOCTYPE html>
 <html lang="de">
@@ -30,7 +35,7 @@
         <div class="box">
           <div class="right-side">
             <div class="box-topic">Lehrer</div>
-            <div class="number">0</div>
+            <div class="number"><?php echo $teacherCount; ?></div>
           </div>
           <i class='bx bxs-graduation icon'></i>
         </div>

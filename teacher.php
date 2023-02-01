@@ -1,4 +1,7 @@
-<?php require 'static/auth.php' ?>
+<?php require 'static/auth.php';
+$mongoClient = new MongoDB\Client($mongoDBConnection);
+$mongoDB = $mongoClient->$mongoDBDatabase;
+?>
 
 <!DOCTYPE html>
 <html lang="de">
@@ -36,8 +39,8 @@
               <p class="form-description" for="name">Fügen Sie eine neue Lehrperson hinzu, diese auch Zugriff auf dieses Dashboard hat.</p>
               <form id="createTeacher" name="createTeacher" class="form-form" action="" method="post">
                   <input class="form-input" type="text" id="name" name="name" placeholder="Vollständiger Name" required>
-                  <select class="form-input" name="role" id="role" placeholder="Wähle Rang" required>
-                      <option hidden selected value="undefined">Wähle Rang</option>
+                  <select class="form-input" name="role" id="role" placeholder="Wähle Berechtigung" required>
+                      <option hidden selected value="undefined">Wähle Berechtigung</option>
                       <option value="admin">Administrator</option>
                       <option value="teacher">Lehrpersonal</option>
                   </select>
@@ -56,14 +59,15 @@
               <h1 class="form-title">Lehrperson Editieren</h1>
               <form class="form-form" action="../backend/editTeacher.php" method="post">
                   <select id="listTeachers" class="form-input js-data-example-ajax"></select>
+                  <button onclick="fetchTeacherData();" style="margin-bottom:8px;">Laden</button>
                   <input class="form-input" type="text" id="username" name="username" placeholder="Nutzername" required>
                   <input class="form-input" type="text" id="name" name="name" placeholder="Vollständiger Name" required>
-                  <select class="form-input" name="role" id="role" placeholder="Wähle Rang" required>
-                      <option hidden selected value="undefined">Wähle Rang</option>
+                  <select class="form-input" name="role" id="role" placeholder="Wähle Berechtigung" required>
+                      <option selected value="undefined">Wähle Berechtigung</option>
                       <option value="admin">Administrator</option>
                       <option value="teacher">Lehrpersonal</option>
                   </select>
-                  <select id="listSubjects" class="form-input js-data-example-ajax js-select2-multi" multiple="multiple"></select>
+                  <select name="subjects" id="listSubjects" class="form-input js-data-example-ajax js-select2-multi" multiple="multiple"></select>
                   <input class="form-input" type="number" name="room" id="room" placeholder="Lehrerzimmer">
                   <input class="form-input" type="text" name="birthday" id="birthday" onfocus="(this.type=\'date\')"onblur="(this.type=\'text\')" placeholder="Geburtsdatum">
                   <input class="form-input" type="email" name="email" id="email" placeholder="E-Mail">
@@ -87,6 +91,7 @@
               header('Location: teacher');
             }
           } else {
+            $row = $mongoDB->teacher->find();
             echo '
               <table id="tableTeacher" class="ui celled table">
                 <thead>
@@ -101,7 +106,25 @@
                       <th>E-Mail</th>
                     </tr>
                 </thead>
-            </table>';
+                <tbody>';
+                foreach ($row as $teacher) {
+                  echo '<tr>
+                    <td>'.$teacher['id'].'</td>
+                    <td>'.$teacher['username'].'</td>
+                    <td>'.$teacher['name'].'</td>
+                    <td>'.$teacher['role'].'</td>
+                    <td>'.$teacher['room'].'</td>
+                    <td>';
+                    foreach ($teacher['subjects'] as $subject) {
+                      echo $subject.', ';
+                    }
+                    echo '</td>
+                    <td>'.$teacher['birthdate'].'</td>
+                    <td>'.$teacher['email'].'</td>
+                  </tr>';
+                };
+              echo '</tbody>
+              </table>';
           }
         ?>
       </div>
