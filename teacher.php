@@ -58,18 +58,15 @@ $mongoDB = $mongoClient->$mongoDBDatabase;
               echo '<div class="form-form-container">
               <h1 class="form-title">Lehrperson Editieren</h1>
               <form class="form-form" action="../backend/editTeacher.php" method="post">
-                  <select id="listTeachers" class="form-input js-data-example-ajax"></select>
-                  <button onclick="fetchTeacherData();" style="margin-bottom:8px;">Laden</button>
+                  <select id="listTeachers" onchange="fetchTeacherData();" class="form-input js-data-example-ajax"></select>
                   <input class="form-input" type="text" id="username" name="username" placeholder="Nutzername" required>
                   <input class="form-input" type="text" id="name" name="name" placeholder="Vollständiger Name" required>
                   <select class="form-input" name="role" id="role" placeholder="Wähle Berechtigung" required>
-                      <option selected value="undefined">Wähle Berechtigung</option>
+                      <option selected hidden value="undefined">Wähle Berechtigung</option>
                       <option value="admin">Administrator</option>
                       <option value="teacher">Lehrpersonal</option>
                   </select>
-                  <select name="subjects" id="listSubjects" class="form-input js-data-example-ajax js-select2-multi" multiple="multiple"></select>
                   <input class="form-input" type="number" name="room" id="room" placeholder="Lehrerzimmer">
-                  <input class="form-input" type="text" name="birthday" id="birthday" onfocus="(this.type=\'date\')"onblur="(this.type=\'text\')" placeholder="Geburtsdatum">
                   <input class="form-input" type="email" name="email" id="email" placeholder="E-Mail">
                   <input class="form-input" type="password" name="password" id="password" placeholder="Passwort" required>
                   <button class="form-btn" type="submit" id="submit">Aktualisieren</button>

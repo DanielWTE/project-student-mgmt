@@ -111,6 +111,7 @@ $('#listScores').select2({
 });
 });
 
+
 function fetchTeacherData(){
   let username = $('#listTeachers').text();
   $.ajax({
@@ -124,9 +125,7 @@ function fetchTeacherData(){
       document.getElementById('username').value = obj['username'];
       document.getElementById('name').value = obj['name'];
       document.getElementById('role').value = obj['role'];
-      // document.getElementById('subjects').value = obj['subjects'];
       document.getElementById('room').value = obj['room'];
-      // document.getElementById('birthdate').date = Date.parse(obj['birthdate']);
       document.getElementById('email').value = obj['email'];
     }
   });
@@ -136,7 +135,6 @@ function fetchTeacherData(){
 /* Requests */
 
 function submitCreateTeacher(){
-  console.log('Creating teacher...');
   let form = $('#createTeacher');
   // Hier gibt es ggf. Probleme / Also mal deaktiviert lol
   // if(form.valid()){
@@ -151,8 +149,6 @@ function submitCreateTeacher(){
     let email = formParams.get('email');
     let password = formParams.get('password');
     let password2 = formParams.get('password2');
-
-    console.log("Jooo");
 
     $.ajax({
       url:'../../backend/teacher/createTeacher.php',
