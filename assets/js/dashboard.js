@@ -122,11 +122,23 @@ function fetchTeacherData(){
     },
     success:function(data){
       const obj = JSON.parse(data);
-      document.getElementById('username').value = obj['username'];
-      document.getElementById('name').value = obj['name'];
-      document.getElementById('role').value = obj['role'];
-      document.getElementById('room').value = obj['room'];
-      document.getElementById('email').value = obj['email'];
+      let username = document.getElementById('username');
+      let name = document.getElementById('name');
+      let role = document.getElementById('role');
+      let room = document.getElementById('room');
+      let email = document.getElementById('email');
+      
+      username.value = "";
+      username.value = obj['username'];
+      name.value = "";
+      name.value = obj['name'];
+      role.value = "";
+      role.value = obj['role'];
+      room.value = "";
+      room.value = obj['room'];
+      email.value = "";
+      email.value = obj['email'];
+
     }
   });
 }
